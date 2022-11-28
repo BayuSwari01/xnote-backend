@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Api\AuthController;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,6 +16,22 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+//jika mengakses dengan method post argumen register maka akan memanggil method register
+Route::post('register', [AuthController::class, 'register']);
+
+//jika mengakses dengan method post argumen login maka akan memanggil method login
+Route::post('login', [AuthController::class, 'login']);
+
+//jika posisi sudah login dan mengakses dengan method post argumen '/logout' maka akan memanggil method logout
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/logout', [AuthController::class, 'logout']);
+});
+
+Route::get('test', function () {
+    User::create([
+        'name' => 'Bayu',
+        'email' => 'bayu@gmail.com',
+        'password' => 'admin123',
+    ]);
+    return User::all();
 });
