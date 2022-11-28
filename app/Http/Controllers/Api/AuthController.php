@@ -23,7 +23,10 @@ class AuthController extends Controller
 
         //cek apakah ada yg gagal dari validator
         if ($validator->fails()) {
-            return response()->json($validator->errors());
+            return response()->json([
+                'status' => false,
+                'message' => $validator->errors()
+            ]);
         }
 
         //menyimpan model ke database
@@ -41,8 +44,10 @@ class AuthController extends Controller
         
         //mengembalikan data berupa json
         return response()->json([
+            'email' => $user->email,
+            'status' => true,
             'data' => $user,
-            'access_token' => $token,
+            'token' => $token,
             'token_type' => 'Bearer'
         ]);
     }
@@ -50,8 +55,7 @@ class AuthController extends Controller
     public function login(Request $request) {
         //jika proses autentikasi gagal maka akan mengembalikan pesan unauthorized
         $credentials = $request->only('email', 'password');
-        $iniUser = User::where('email', $request->email)->FirstOrFail();
-        $cek = Hash::check($request->password, $iniUser->password);
+
         if (Auth::attempt($credentials)) {
             $user = User::where('email', $request->email)->FirstOrFail();
         
@@ -60,14 +64,16 @@ class AuthController extends Controller
             
             //jika login berhasil akan memberikan response berikut
             return response()->json([
+                'email' => $user->email,
+                'status' => true,
                 'message' => 'Login Success',
-                'access_token' => $token,
+                'token' => $token,
                 'token_type' => 'Bearer'
             ]);
         }
 
         return response()->json([
-            'cek' => $cek,
+            'status' => false,
             'email' => $request->email,
             'password' => $request->password,
             'message' => 'Unauthorized',
@@ -78,8 +84,9 @@ class AuthController extends Controller
         //menghapus token (ini emang ada error tapi tetep jalan)
         Auth::user()->tokens()->delete();
         
-        //mengitim pesan
+        //mengirim pesan
         return response()->json([
+            'status' => true,
             'message' => 'Logout Success'
         ]);
     }
