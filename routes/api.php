@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\NoteController;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -27,11 +28,23 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
 });
 
-Route::get('test', function () {
-    User::create([
-        'name' => 'Bayu',
-        'email' => 'bayu@gmail.com',
-        'password' => 'admin123',
-    ]);
-    return User::all();
-});
+Route::post('getNote', [NoteController::class, 'getNotes']);
+
+Route::post('addNote', [NoteController::class, 'addNote']);
+
+Route::post('editNote', [NoteController::class, 'editNote']);
+
+Route::post('deleteNote', [NoteController::class, 'deleteNote']);
+
+// Route::middleware('auth:sanctum')->group(function () {
+//     Route::get('getNote', [NoteController::class, 'getNotes']);
+// });
+
+// Route::get('test', function () {
+//     User::create([
+//         'name' => 'Bayu',
+//         'email' => 'bayu@gmail.com',
+//         'password' => 'admin123',
+//     ]);
+//     return User::all();
+// });
