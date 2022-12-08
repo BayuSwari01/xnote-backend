@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\NoteController;
+use App\Http\Controllers\TodolistController;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -29,12 +30,15 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 Route::post('getNote', [NoteController::class, 'getNotes']);
-
 Route::post('addNote', [NoteController::class, 'addNote']);
-
 Route::post('editNote', [NoteController::class, 'editNote']);
-
 Route::post('deleteNote', [NoteController::class, 'deleteNote']);
+
+Route::post('getTodolist', [TodolistController::class, 'getTodolist']);
+Route::post('addTodolist', [TodolistController::class, 'addTodolist']);
+Route::post('editTodolist', [TodolistController::class, 'editTodolist']);
+Route::post('deleteTodolist', [TodolistController::class, 'deleteTodolist']);
+Route::post('editStatusTodolist', [TodolistController::class, 'editStatusTodolist']);
 
 // Route::middleware('auth:sanctum')->group(function () {
 //     Route::get('getNote', [NoteController::class, 'getNotes']);
